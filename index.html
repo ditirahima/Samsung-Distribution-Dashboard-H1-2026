@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Samsung Electronics — Global Distribution Network Dashboard H1 2026</title>
+<style>
+:root{
+  --navy:#0A1628;--blue:#1428A0;--lblue:#2D5BE3;--steel:#1E3A5F;
+  --white:#FFFFFF;--offwh:#F7F8FC;--g1:#6B7A9B;--g2:#D1D8E8;--g3:#E8ECF4;
+  --gold:#C8962E;--red:#C0392B;--green:#1A6B3C;
+  --lgreen:#E8F5EE;--lred:#FEE8E8;--lyellow:#FFF8E1;--ice:#EEF2FF;
+  --r:10px;--sh:0 2px 14px rgba(10,22,40,.09);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--offwh);color:var(--navy);font-family:'Segoe UI',Arial,sans-serif;font-size:13px;line-height:1.5;}
+.hdr{background:var(--navy);padding:16px 28px 12px;display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--blue);}
+.hdr h1{font-size:19px;font-weight:700;color:#fff;}
+.hdr .sub{font-size:10.5px;color:var(--g2);margin-top:3px;}
+.hdr .right{text-align:right;}
+.hdr .prep{font-size:11px;font-weight:700;color:var(--gold);}
+.hdr .disc{font-size:9px;color:var(--g1);font-style:italic;max-width:370px;}
+.nav{background:var(--steel);padding:0 28px;display:flex;gap:2px;}
+.tab{padding:9px 16px;font-size:11px;font-weight:600;color:var(--g2);cursor:pointer;border-bottom:3px solid transparent;transition:all .15s;user-select:none;}
+.tab:hover{color:#fff;border-bottom-color:var(--g2);}
+.tab.active{color:#fff;border-bottom-color:var(--gold);}
+.page{display:none;}.page.active{display:block;}
+.wrap{padding:18px 26px 28px;}
+.kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;margin-bottom:20px;}
+.kpi{background:#fff;border-radius:var(--r);padding:14px 14px 12px;box-shadow:var(--sh);border-top:3px solid var(--blue);}
+.kpi.t-gold{border-top-color:var(--gold);}.kpi.t-red{border-top-color:var(--red);}.kpi.t-green{border-top-color:var(--green);}.kpi.t-steel{border-top-color:var(--steel);}
+.kpi-lbl{font-size:9px;font-weight:700;color:var(--g1);text-transform:uppercase;letter-spacing:.7px;margin-bottom:5px;}
+.kpi-val{font-size:23px;font-weight:700;color:var(--navy);line-height:1.1;}
+.kpi-sub{font-size:9.5px;color:var(--g1);margin-top:4px;}
+.kpi-note{font-size:9px;font-style:italic;margin-top:2px;}
+.two-col{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-bottom:16px;}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px;}
+.full{margin-bottom:16px;}
+.card{background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:16px 18px;border:1px solid var(--g3);}
+.sec{font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.7px;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.sec::before{content:'';width:3px;height:13px;background:var(--blue);border-radius:2px;flex-shrink:0;}
+.dt{width:100%;border-collapse:collapse;font-size:11px;}
+.dt th{background:var(--navy);color:#fff;padding:7px 9px;text-align:left;font-size:9px;font-weight:700;letter-spacing:.4px;white-space:nowrap;}
+.dt td{padding:6px 9px;border-bottom:1px solid var(--g3);}
+.dt tr:nth-child(even) td{background:var(--offwh);}
+.dt tr:last-child td{background:var(--ice);font-weight:700;}
+.pill{display:inline-block;padding:2px 8px;border-radius:20px;font-size:9px;font-weight:700;}
+.pg{background:var(--lgreen);color:var(--green);}
+.pr{background:var(--lred);color:var(--red);}
+.py{background:var(--lyellow);color:#7A5500;}
+.pb{background:var(--ice);color:var(--blue);}
+.pn{background:var(--g3);color:var(--navy);}
+.bar-ch{display:flex;align-items:flex-end;gap:9px;height:130px;padding:8px 0 0;}
+.bw{display:flex;flex-direction:column;align-items:center;flex:1;}
+.bf{width:100%;border-radius:4px 4px 0 0;min-height:3px;position:relative;}
+.bv{font-size:8.5px;font-weight:700;color:var(--navy);position:absolute;top:-15px;left:50%;transform:translateX(-50%);white-space:nowrap;}
+.bl{font-size:8.5px;color:var(--g1);margin-top:4px;text-align:center;line-height:1.2;}
+.hm-grid{display:grid;gap:3px;}
+.hm-cell{height:32px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;}
+.hm-rl{font-size:9.5px;color:var(--g1);display:flex;align-items:center;justify-content:flex-end;padding-right:8px;}
+.hm-cl{font-size:8.5px;color:var(--g1);display:flex;align-items:center;justify-content:center;text-align:center;height:26px;}
+.hm-legend{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;}
+.hm-li{display:flex;align-items:center;gap:5px;font-size:9.5px;color:var(--g1);}
+.hm-sw{width:12px;height:12px;border-radius:2px;}
+.ins-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px;}
+.ins{background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:15px;border:1px solid var(--g3);}
+.ins-tag{font-size:8.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:5px;}
+.ins-stat{font-size:26px;font-weight:700;line-height:1.1;margin:7px 0 3px;}
+.ins-title{font-size:12px;font-weight:700;margin-bottom:7px;}
+.ins-body{font-size:10px;color:var(--g1);line-height:1.55;}
+.ins-box{margin-top:10px;padding:9px;border-radius:6px;}
+.rec-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-bottom:13px;}
+.rec-grid2{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.rec{background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:15px;border:1px solid var(--g3);}
+.rec-num{font-size:13px;font-weight:700;margin-bottom:5px;}
+.rec-title{font-size:12px;font-weight:700;margin-bottom:7px;}
+.rec-body{font-size:10px;color:var(--g1);line-height:1.55;margin-bottom:11px;}
+.rec-foot{display:flex;justify-content:space-between;align-items:center;}
+.rec-imp{font-size:10.5px;font-weight:700;}
+.rec-hor{font-size:9.5px;color:var(--g1);}
+.site-footer{background:var(--navy);border-top:1px solid var(--steel);padding:9px 26px;display:flex;justify-content:space-between;align-items:center;}
+.site-footer p{font-size:9px;color:var(--g1);font-style:italic;}
+.site-footer .fp{font-size:10px;font-weight:700;color:var(--gold);}
+.src{font-size:9px;color:var(--g1);margin-top:7px;font-style:italic;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div>
+    <h1>🔵 Samsung Electronics — Global Distribution Network Dashboard H1 2026</h1>
+    <div class="sub">Jan–Jun 2026 · USD millions · 45 DC Branches · 15 Countries · 5 Regions · Anchored to Samsung Q1 2026 Official Earnings</div>
+  </div>
+  <div class="right">
+    <div class="prep">Prepared by: Rahima Akter Diti</div>
+    <div class="disc">This analysis is for demonstration purposes based on modeled data. Internal Samsung Electronics disclosures may differ.</div>
+  </div>
+</div>
+
+<div class="nav">
+  <div class="tab active" onclick="show('overview',this)">Overview</div>
+  <div class="tab" onclick="show('throughput',this)">DC Throughput</div>
+  <div class="tab" onclick="show('heatmap',this)">Inventory Heatmap</div>
+  <div class="tab" onclick="show('leadtime',this)">Lead Time Variance</div>
+  <div class="tab" onclick="show('insights',this)">Insights</div>
+  <div class="tab" onclick="show('recs',this)">Recommendations</div>
+</div>
+
+<!-- OVERVIEW -->
+<div class="page active" id="pg-overview"><div class="wrap">
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-lbl">Total H1 Revenue</div><div class="kpi-val">$185,000<span style="font-size:13px;font-weight:400">mm</span></div><div class="kpi-sub">USD millions</div><div class="kpi-note" style="color:var(--green)">▲ +22.9% Jan→Jun</div></div>
+    <div class="kpi t-steel"><div class="kpi-lbl">Shipment Volume</div><div class="kpi-val">1.33M<span style="font-size:13px;font-weight:400"> units</span></div><div class="kpi-sub">000 units · 6 months</div><div class="kpi-note" style="color:var(--g1)">6-month cumulative</div></div>
+    <div class="kpi t-green"><div class="kpi-lbl">Avg On-Time Delivery</div><div class="kpi-val">93.4%</div><div class="kpi-sub">OTD Rate blended</div><div class="kpi-note" style="color:var(--green)">N. America best: 94.3%</div></div>
+    <div class="kpi t-gold"><div class="kpi-lbl">Avg Lead Time</div><div class="kpi-val">7.5<span style="font-size:13px;font-weight:400"> d</span></div><div class="kpi-sub">Blended all regions</div><div class="kpi-note" style="color:var(--gold)">⚠ Display: 9.0d peak</div></div>
+    <div class="kpi t-red"><div class="kpi-lbl">Revenue at Risk</div><div class="kpi-val">$163<span style="font-size:13px;font-weight:400">mm</span></div><div class="kpi-sub">Delayed shipment impact</div><div class="kpi-note" style="color:var(--red)">Display + Harman driven</div></div>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <div class="sec">Regional Distribution Performance</div>
+      <table class="dt"><thead><tr><th>Region</th><th>Revenue ($mm)</th><th>OTD</th><th>Lead Time</th><th>Delay Rate</th><th>Capacity</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Asia Pacific</strong></td><td>$87,271</td><td>93.3%</td><td>7.5d</td><td>6.7%</td><td><span class="pill pr">Tight</span></td><td><span class="pill pr">Critical</span></td></tr>
+        <tr><td><strong>North America</strong></td><td>$46,364</td><td>94.3%</td><td>7.5d</td><td>5.6%</td><td><span class="pill pg">Normal</span></td><td><span class="pill pg">Sustain</span></td></tr>
+        <tr><td><strong>Europe</strong></td><td>$23,824</td><td>93.3%</td><td>7.5d</td><td>6.7%</td><td><span class="pill pg">Normal</span></td><td><span class="pill pb">Optimise</span></td></tr>
+        <tr><td><strong>Latin America</strong></td><td>$16,581</td><td>93.3%</td><td>7.5d</td><td>6.7%</td><td><span class="pill pg">Normal</span></td><td><span class="pill py">Expand</span></td></tr>
+        <tr><td><strong>Mid East &amp; Africa</strong></td><td>$10,960</td><td>93.3%</td><td>7.5d</td><td>6.7%</td><td><span class="pill pg">Normal</span></td><td><span class="pill pn">Consolidate</span></td></tr>
+        <tr><td><strong>TOTAL</strong></td><td>$185,000</td><td>93.7%</td><td>7.5d</td><td>6.5%</td><td>—</td><td>—</td></tr>
+      </tbody></table>
+      <p class="src">Source: Delivery_Shipment / Branch Directory / Supply Chain Report sheets</p>
+    </div>
+    <div class="card">
+      <div class="sec">Monthly Revenue Trend ($mm)</div>
+      <svg id="ovLine" viewBox="0 0 440 150" style="width:100%;height:150px;overflow:visible;"></svg>
+      <p class="src">Source: Summary by Month sheet · Samsung Q1 2026</p>
+    </div>
+  </div>
+  <div class="card full">
+    <div class="sec">Category Distribution &amp; Inventory Intelligence</div>
+    <table class="dt"><thead><tr><th>Category</th><th>Revenue ($mm)</th><th>Rev Mix</th><th>Shipment Vol (000)</th><th>Avg Lead (d)</th><th>Lead σ</th><th>OTD</th><th>Inv Turns</th><th>Safety Buffer %</th><th>Cost Ratio</th><th>Risk</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Memory Semiconductors</strong></td><td>$70,449</td><td>38.1%</td><td>541,915</td><td>4.0</td><td>0.000</td><td>93.4%</td><td>6.30</td><td>12.1%</td><td>0.52</td><td><span class="pill pg">Low</span></td></tr>
+      <tr><td><strong>Mobile Experience</strong></td><td>$48,157</td><td>26.0%</td><td>123,479</td><td>7.0</td><td>0.000</td><td>93.4%</td><td>6.30</td><td>11.9%</td><td>0.82</td><td><span class="pill py">Medium</span></td></tr>
+      <tr><td><strong>Foundry / System LSI</strong></td><td>$23,939</td><td>12.9%</td><td>398,978</td><td>8.0</td><td>0.826</td><td>93.4%</td><td>6.30</td><td>12.2%</td><td>0.82</td><td><span class="pill py">Medium</span></td></tr>
+      <tr><td><strong>Consumer Electronics</strong></td><td>$18,513</td><td>10.0%</td><td>35,602</td><td>8.0</td><td>0.826</td><td>93.4%</td><td>6.30</td><td>12.1%</td><td>0.87</td><td><span class="pill py">Medium</span></td></tr>
+      <tr><td><strong>Display Panels</strong></td><td>$16,588</td><td>9.0%</td><td>221,170</td><td>9.0</td><td>2.185</td><td>93.4%</td><td>6.30</td><td>11.8%</td><td>0.80</td><td><span class="pill pr">High</span></td></tr>
+      <tr><td><strong>Harman / Auto Electronics</strong></td><td>$7,355</td><td>4.0%</td><td>10,507</td><td>9.0</td><td>2.185</td><td>93.4%</td><td>6.30</td><td>12.1%</td><td>0.90</td><td><span class="pill pr">High</span></td></tr>
+      <tr><td><strong>TOTAL / AVERAGE</strong></td><td>$185,000</td><td>100%</td><td>1,331,650</td><td>7.5</td><td>1.004</td><td>93.4%</td><td>6.30</td><td>12.0%</td><td>0.79</td><td>—</td></tr>
+    </tbody></table>
+    <p class="src">Source: Summary_by_Category / Delivery_Shipment / Inventory_Product_Service · Samsung Q1 2026</p>
+  </div>
+</div></div>
+
+<!-- DC THROUGHPUT -->
+<div class="page" id="pg-throughput"><div class="wrap">
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-lbl">Total DC Branches</div><div class="kpi-val">45</div><div class="kpi-sub">All active · 5 regions</div></div>
+    <div class="kpi t-gold"><div class="kpi-lbl">Highest Rev/Branch</div><div class="kpi-val">$7,727mm</div><div class="kpi-sub">North America</div></div>
+    <div class="kpi t-red"><div class="kpi-lbl">Lowest Rev/Branch</div><div class="kpi-val">$1,218mm</div><div class="kpi-sub">Mid East &amp; Africa</div></div>
+    <div class="kpi t-steel"><div class="kpi-lbl">APAC Revenue Share</div><div class="kpi-val">47.2%</div><div class="kpi-sub">$87.3bn · 15 branches</div></div>
+    <div class="kpi t-green"><div class="kpi-lbl">Contribution Margin</div><div class="kpi-val">28.8%</div><div class="kpi-sub">H1 2026 blended</div></div>
+  </div>
+  <div class="two-col">
+    <div class="card"><div class="sec">DC Throughput — Revenue per Branch ($mm)</div><div class="bar-ch" id="thrBar"></div><p class="src">Source: Branch Directory sheet</p></div>
+    <div class="card"><div class="sec">Revenue Mix by Region</div><svg id="pieSvg" viewBox="0 0 320 195" style="width:100%;height:195px;"></svg><p class="src">Source: Branch Directory / Summary by Nation</p></div>
+  </div>
+  <div class="card full">
+    <div class="sec">Top 15 DC Branches by Revenue</div>
+    <table class="dt"><thead><tr><th>#</th><th>Branch</th><th>Country</th><th>Region</th><th>Revenue ($mm)</th><th>Contrib Profit ($mm)</th><th>Margin %</th><th>Rev Mix %</th><th>Channel Type</th></tr></thead>
+    <tbody id="brTbl"></tbody></table>
+    <p class="src">Source: Branch Directory sheet · Samsung Q1 2026</p>
+  </div>
+</div></div>
+
+<!-- INVENTORY HEATMAP -->
+<div class="page" id="pg-heatmap"><div class="wrap">
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-lbl">Global Inventory Turns</div><div class="kpi-val">6.30×</div><div class="kpi-sub">All categories balanced</div></div>
+    <div class="kpi t-green"><div class="kpi-lbl">Opening Inventory</div><div class="kpi-val">266,741</div><div class="kpi-sub">000 units total</div></div>
+    <div class="kpi t-gold"><div class="kpi-lbl">Display Safety Buffer</div><div class="kpi-val">11.8%</div><div class="kpi-sub">Lowest — fragility risk</div></div>
+    <div class="kpi t-steel"><div class="kpi-lbl">Memory Safety Buffer</div><div class="kpi-val">12.1%</div><div class="kpi-sub">Highest strategic priority</div></div>
+    <div class="kpi t-red"><div class="kpi-lbl">APAC Buffer Days</div><div class="kpi-val">21.6d</div><div class="kpi-sub">Below 25d target</div></div>
+  </div>
+  <div class="card full">
+    <div class="sec">Global Inventory Safety Buffer Heatmap — Region × Category (%)</div>
+    <div style="overflow-x:auto;"><div class="hm-grid" id="hmGrid" style="grid-template-columns:130px repeat(6,1fr);"></div></div>
+    <div class="hm-legend">
+      <span>Scale:</span>
+      <div class="hm-li"><div class="hm-sw" style="background:#1A6B3C;"></div>≥12.1% Optimal</div>
+      <div class="hm-li"><div class="hm-sw" style="background:#2E8B57;"></div>11.9–12.0% Good</div>
+      <div class="hm-li"><div class="hm-sw" style="background:#C8962E;"></div>11.8% Watch</div>
+      <div class="hm-li"><div class="hm-sw" style="background:#C0392B;"></div>&lt;11.8% At Risk</div>
+    </div>
+    <p class="src">Source: Inventory_Product_Service sheet | Safety Buffer = Closing Inventory / Sold × 100</p>
+  </div>
+  <div class="two-col">
+    <div class="card"><div class="sec">Inventory Turns by Category</div><div class="bar-ch" id="turnsBar"></div><p class="src">Source: Inventory_Product_Service sheet</p></div>
+    <div class="card">
+      <div class="sec">Opening vs Closing Inventory by Region (000 units)</div>
+      <table class="dt" style="font-size:10.5px;"><thead><tr><th>Region</th><th>Opening</th><th>Closing</th><th>Change</th><th>Buffer (d)</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Asia Pacific</td><td>125,908</td><td>75,607</td><td style="color:var(--red)">▼ −40.0%</td><td>21.6</td><td><span class="pill py">Watch</span></td></tr>
+        <tr><td>North America</td><td>66,776</td><td>40,131</td><td style="color:var(--red)">▼ −39.9%</td><td>21.4</td><td><span class="pill pg">Good</span></td></tr>
+        <tr><td>Europe</td><td>34,455</td><td>20,713</td><td style="color:var(--red)">▼ −39.9%</td><td>21.6</td><td><span class="pill pg">Good</span></td></tr>
+        <tr><td>Latin America</td><td>23,730</td><td>14,211</td><td style="color:var(--red)">▼ −40.1%</td><td>21.6</td><td><span class="pill pg">Good</span></td></tr>
+        <tr><td>Mid East &amp; Africa</td><td>15,871</td><td>9,546</td><td style="color:var(--red)">▼ −39.9%</td><td>21.6</td><td><span class="pill pg">Good</span></td></tr>
+        <tr><td><strong>TOTAL</strong></td><td><strong>266,740</strong></td><td><strong>160,208</strong></td><td>▼ −39.9%</td><td>21.6</td><td>—</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</div></div>
+
+<!-- LEAD TIME VARIANCE -->
+<div class="page" id="pg-leadtime"><div class="wrap">
+  <div class="kpi-row">
+    <div class="kpi t-green"><div class="kpi-lbl">Best Lead Time</div><div class="kpi-val">4.0d</div><div class="kpi-sub">Memory Semiconductors</div><div class="kpi-note" style="color:var(--green)">σ=0.000 — stable</div></div>
+    <div class="kpi t-red"><div class="kpi-lbl">Worst Lead Time</div><div class="kpi-val">9.0d</div><div class="kpi-sub">Display &amp; Harman</div><div class="kpi-note" style="color:var(--red)">σ=2.185 — high variance</div></div>
+    <div class="kpi t-gold"><div class="kpi-lbl">Peak Variance (σ)</div><div class="kpi-val">2.185d</div><div class="kpi-sub">Display / Harman</div><div class="kpi-note" style="color:var(--gold)">165% above peer avg</div></div>
+    <div class="kpi t-steel"><div class="kpi-lbl">Total Delay Pool H1</div><div class="kpi-val">85,897</div><div class="kpi-sub">000 units delayed</div></div>
+    <div class="kpi"><div class="kpi-lbl">Best OTD Region</div><div class="kpi-val">94.3%</div><div class="kpi-sub">North America</div><div class="kpi-note" style="color:var(--green)">Best in network</div></div>
+  </div>
+  <div class="two-col">
+    <div class="card"><div class="sec">Lead Time by Category — Mean ± Variance Band</div><div id="ltViz" style="padding:8px 0;"></div><p class="src">Source: Delivery_Shipment | Error band = ±1 standard deviation</p></div>
+    <div class="card"><div class="sec">Monthly Shipment Volume (000 units)</div><svg id="volLine" viewBox="0 0 360 150" style="width:100%;height:150px;overflow:visible;"></svg><p class="src">Source: Summary by Month / Delivery_Shipment</p></div>
+  </div>
+  <div class="card full">
+    <div class="sec">Shipping Lane Lead Time Variance — Full Matrix</div>
+    <table class="dt"><thead><tr><th>Category</th><th>Avg Lead (d)</th><th>σ</th><th>Min</th><th>Max</th><th>OTD</th><th>Delay Vol (000)</th><th>Delay Impact ($mm)</th><th>Risk</th><th>Primary Bottleneck</th><th>Optimization Target</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Memory Semiconductors</strong></td><td>4.0</td><td>0.000</td><td>3d</td><td>5d</td><td>93.4%</td><td>34,798</td><td>$2,620</td><td><span class="pill pb">Watch</span></td><td>Volume-driven; fab stable</td><td>DC pre-positioning → 3.5d</td></tr>
+      <tr><td><strong>Mobile Experience</strong></td><td>7.0</td><td>0.000</td><td>6d</td><td>8d</td><td>93.4%</td><td>7,988</td><td>$290</td><td><span class="pill py">Medium</span></td><td>Carrier staging adds 2d</td><td>Cross-dock 3 nodes → 6.0d</td></tr>
+      <tr><td><strong>Foundry / System LSI</strong></td><td>8.0</td><td>0.826</td><td>6d</td><td>10d</td><td>93.4%</td><td>25,679</td><td>$462</td><td><span class="pill py">Medium</span></td><td>Foundry takt scheduling</td><td>Demand signal integration</td></tr>
+      <tr><td><strong>Consumer Electronics</strong></td><td>8.0</td><td>0.826</td><td>6d</td><td>10d</td><td>93.4%</td><td>2,297</td><td>$111</td><td><span class="pill py">Medium</span></td><td>Multi-SKU assembly at DC</td><td>Consolidate inbound → 7.5d</td></tr>
+      <tr><td><strong>Display Panels</strong></td><td>9.0</td><td>2.185</td><td>5d</td><td>14d</td><td>93.4%</td><td>14,297</td><td>$93</td><td><span class="pill pr">High</span></td><td>OLED fragility handling</td><td>Modular packaging → ±1.0d</td></tr>
+      <tr><td><strong>Harman / Auto Electronics</strong></td><td>9.0</td><td>2.185</td><td>5d</td><td>14d</td><td>93.4%</td><td>678</td><td>$22</td><td><span class="pill pr">High</span></td><td>Multi-market customs certs</td><td>Pre-cert bonded warehouse</td></tr>
+      <tr><td><strong>BLENDED AVERAGE</strong></td><td>7.5</td><td>1.004</td><td>5d</td><td>10d</td><td>93.4%</td><td>85,737</td><td>$598</td><td>—</td><td>—</td><td>—</td></tr>
+    </tbody></table>
+    <p class="src">Source: Delivery_Shipment / Supply Chain Report / Gap Analysis sheets</p>
+  </div>
+</div></div>
+
+<!-- INSIGHTS -->
+<div class="page" id="pg-insights"><div class="wrap">
+  <div class="ins-grid">
+    <div class="ins" style="border-top:3px solid var(--blue)">
+      <div class="ins-tag" style="color:var(--blue)">INSIGHT 01 — SAFETY STOCK</div>
+      <div class="ins-stat" style="color:var(--blue)">47.2%</div>
+      <div class="ins-title">APAC Carries Disproportionate Demand Risk</div>
+      <div class="ins-body">APAC represents 47.2% of global revenue ($87.3bn) and volume but operates under 'Tight' capacity with 33% Medium supplier risk. Modelled safety stock requirement: ~19,487 units/000 — highest of any region. A demand surge ≥15% creates stockout risk within 5 days without DC capacity expansion in China and India. Buffer currently 21.6d vs 25d target.</div>
+      <div class="ins-box" style="background:var(--ice);">
+        <div style="font-size:9px;font-weight:700;color:var(--blue)">📊 Key Metrics</div>
+        <div style="font-size:9.5px;color:var(--g1);margin-top:3px;">SS req: ~19,487 units/000 · Buffer 21.6d vs 25d target · 15 DC branches</div>
+      </div>
+    </div>
+    <div class="ins" style="border-top:3px solid var(--red)">
+      <div class="ins-tag" style="color:var(--red)">INSIGHT 02 — LEAD TIME VARIANCE</div>
+      <div class="ins-stat" style="color:var(--red)">σ 2.185d</div>
+      <div class="ins-title">Display &amp; Harman: 2.185× Lead Time Variance vs Peers</div>
+      <div class="ins-body">Display Panels and Harman/Auto Electronics exhibit σ=2.185 days versus 0.000 for Memory and 0.826 for Foundry — 165% higher. OLED panel fragility and automotive multi-market customs certification drive this variance. Combined delay pool: 14,975 units/000 per period. Deferred revenue risk: ~$163mm per H1.</div>
+      <div class="ins-box" style="background:var(--lred);">
+        <div style="font-size:9px;font-weight:700;color:var(--red)">⚠ Risk Signals</div>
+        <div style="font-size:9.5px;color:var(--g1);margin-top:3px;">Max lead: 14d (2.3× avg) · Delay pool: 14,975 units/000 · $163mm risk</div>
+      </div>
+    </div>
+    <div class="ins" style="border-top:3px solid var(--green)">
+      <div class="ins-tag" style="color:var(--green)">INSIGHT 03 — CROSS-DOCK EFFICIENCY</div>
+      <div class="ins-stat" style="color:var(--green)">0.65×</div>
+      <div class="ins-title">Distributor/Retail Channel: 65% Cross-Dock Factor — Network Best</div>
+      <div class="ins-body">The Distributor/Retail channel achieves 6.5d avg lead vs 8.5d Carrier/Operator — cross-dock efficiency factor 0.65, best in network. With 444,395 units/000 H1 volume and 21.9d buffer, this is the prime DC pre-positioning candidate. Shifting 10% of OEM volume to cross-dock routing reduces blended lead by ~0.4d and saves ~$38mm annually.</div>
+      <div class="ins-box" style="background:var(--lgreen);">
+        <div style="font-size:9px;font-weight:700;color:var(--green)">✓ Opportunity</div>
+        <div style="font-size:9.5px;color:var(--g1);margin-top:3px;">Lead saving: −0.4d · Annual saving: ~$38mm · Vol: 444,395 units/000</div>
+      </div>
+    </div>
+  </div>
+  <div class="three-col">
+    <div class="card"><div class="sec">Channel Efficiency</div>
+      <table class="dt" style="font-size:10.5px;"><thead><tr><th>Channel</th><th>Lead (d)</th><th>XD Factor</th><th>Buffer (d)</th></tr></thead><tbody>
+        <tr><td>Distributor / Retail</td><td>6.5</td><td><strong style="color:var(--green)">0.65</strong></td><td>21.9</td></tr>
+        <tr><td>Semiconductor OEM</td><td>7.5</td><td>0.40</td><td>21.4</td></tr>
+        <tr><td>Carrier / Operator</td><td>8.5</td><td>0.52</td><td>21.6</td></tr>
+      </tbody></table>
+    </div>
+    <div class="card"><div class="sec">Supplier Risk Profile</div>
+      <table class="dt" style="font-size:10.5px;"><thead><tr><th>Risk</th><th>SC Rows</th><th>Share</th></tr></thead><tbody>
+        <tr><td><span class="pill py">Medium</span></td><td>756</td><td>63.6%</td></tr>
+        <tr><td><span class="pill pg">Low</span></td><td>432</td><td>36.4%</td></tr>
+        <tr><td><strong>Total</strong></td><td>1,188</td><td>100%</td></tr>
+      </tbody></table>
+    </div>
+    <div class="card"><div class="sec">Capacity Status</div>
+      <table class="dt" style="font-size:10.5px;"><thead><tr><th>Status</th><th>SC Rows</th><th>Region</th></tr></thead><tbody>
+        <tr><td><span class="pill pg">Normal</span></td><td>792 (66.7%)</td><td>N.America, Europe, MEA</td></tr>
+        <tr><td><span class="pill pr">Tight</span></td><td>396 (33.3%)</td><td>Asia Pacific only</td></tr>
+        <tr><td><strong>Total</strong></td><td>1,188</td><td>—</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</div></div>
+
+<!-- RECOMMENDATIONS -->
+<div class="page" id="pg-recs"><div class="wrap">
+  <div class="rec-grid">
+    <div class="rec" style="border-top:3px solid var(--gold)">
+      <div class="rec-num" style="color:var(--gold)">R1</div>
+      <div class="rec-title">Expand APAC DC Capacity (China + India)</div>
+      <div class="rec-body">APAC generates 47.2% of revenue on Tight capacity with 33% Medium supplier risk. Add 2 dedicated nodes in Shenzhen and Bengaluru. Target: safety buffer from 21.6d → 28d, supporting up to $105bn annual throughput without stockout risk on ≥15% demand surge.</div>
+      <div class="rec-foot"><div class="rec-imp" style="color:var(--gold)">Buffer +6.4d → 28d</div><div class="rec-hor">⏱ Q3–Q4 2026</div></div>
+    </div>
+    <div class="rec" style="border-top:3px solid var(--red)">
+      <div class="rec-num" style="color:var(--red)">R2</div>
+      <div class="rec-title">Reduce Display &amp; Harman Lead Time Variance</div>
+      <div class="rec-body">σ=2.185d drives $163mm deferred revenue risk per H1. Deploy modular OLED packaging to reduce fragility delays and establish pre-certified bonded warehouses per region to eliminate customs variance. Target: σ ≤ 1.0d across both categories.</div>
+      <div class="rec-foot"><div class="rec-imp" style="color:var(--red)">σ 2.185d → ≤1.0d</div><div class="rec-hor">⏱ Q4 2026</div></div>
+    </div>
+    <div class="rec" style="border-top:3px solid var(--lblue)">
+      <div class="rec-num" style="color:var(--lblue)">R3</div>
+      <div class="rec-title">Shift 10% OEM Volume to Cross-Dock Routing</div>
+      <div class="rec-body">Distributor/Retail achieves 6.5d vs 7.5d OEM. Diverting 44,295 units/000 (10% of Semiconductor OEM) to cross-dock DC routing reduces blended lead time by ~0.4d and yields ~$38mm annual holding cost savings across the network.</div>
+      <div class="rec-foot"><div class="rec-imp" style="color:var(--lblue)">$38mm saved / year</div><div class="rec-hor">⏱ Q3 2026</div></div>
+    </div>
+  </div>
+  <div class="rec-grid2">
+    <div class="rec" style="border-top:3px solid var(--green)">
+      <div class="rec-num" style="color:var(--green)">R4</div>
+      <div class="rec-title">MEA Branch Consolidation: 9 → 6 Focal DCs</div>
+      <div class="rec-body">MEA's 9 thin branches average $1,218mm Rev/Branch — lowest in network (global avg $4,111mm). Consolidating to 6 higher-capacity focal nodes lifts Rev/Branch to ~$1,827mm (+50%), reduces coordination overhead, and aligns supplier risk management. High ROI relative to capital required.</div>
+      <div class="rec-foot"><div class="rec-imp" style="color:var(--green)">Rev/Branch +50% → $1,827mm</div><div class="rec-hor">⏱ Q1 2027</div></div>
+    </div>
+    <div class="rec" style="border-top:3px solid #7C3AED">
+      <div class="rec-num" style="color:#7C3AED">R5</div>
+      <div class="rec-title">Deploy Live Monthly Distribution Intelligence Dashboard</div>
+      <div class="rec-body">Operationalise the safety stock + lead time variance model as a live monthly KPI cadence. Integrate OTD rate, lead time σ, delay rate, and capacity tightness into executive scorecards. Enables detection of APAC-style capacity tightening 6–8 weeks before it materially impacts on-time delivery performance.</div>
+      <div class="rec-foot"><div class="rec-imp" style="color:#7C3AED">Systemic risk control</div><div class="rec-hor">⏱ Q4 2026</div></div>
+    </div>
+  </div>
+  <div class="card full" style="margin-top:14px;">
+    <div class="sec">Recommendation Prioritisation Matrix</div>
+    <table class="dt"><thead><tr><th>ID</th><th>Recommendation</th><th>Quantified Impact</th><th>Investment</th><th>Horizon</th><th>Priority</th><th>Owner</th></tr></thead>
+    <tbody>
+      <tr><td><strong style="color:var(--gold)">R1</strong></td><td>Expand APAC DC Capacity (Shenzhen + Bengaluru)</td><td>Buffer +6.4d; support $105bn throughput</td><td>High (CapEx)</td><td>Q3–Q4 2026</td><td><span class="pill pr">Critical</span></td><td>Supply Chain / CapEx</td></tr>
+      <tr><td><strong style="color:var(--red)">R2</strong></td><td>Display &amp; Harman variance reduction</td><td>σ 2.185d → ≤1.0d; $163mm risk mitigated</td><td>Medium</td><td>Q4 2026</td><td><span class="pill pr">High</span></td><td>Operations / Logistics</td></tr>
+      <tr><td><strong style="color:var(--lblue)">R3</strong></td><td>Cross-dock routing: 10% OEM → Distributor</td><td>$38mm annual holding cost saving</td><td>Low (process)</td><td>Q3 2026</td><td><span class="pill py">High</span></td><td>Distribution / Ops</td></tr>
+      <tr><td><strong style="color:var(--green)">R4</strong></td><td>MEA branch consolidation 9 → 6 focal DCs</td><td>Rev/Branch +50% → $1,827mm</td><td>Medium</td><td>Q1 2027</td><td><span class="pill py">Medium</span></td><td>Regional SC / Finance</td></tr>
+      <tr><td><strong style="color:#7C3AED">R5</strong></td><td>Live monthly distribution dashboard</td><td>Systemic 6–8 week early warning</td><td>Low (analytics)</td><td>Q4 2026</td><td><span class="pill pb">Medium</span></td><td>Analytics / Strategy</td></tr>
+    </tbody></table>
+    <p class="src">Source: Samsung H1 2026 modeled dataset · Samsung Q1 2026 official earnings · Interbrand 2025</p>
+  </div>
+</div></div>
+
+<div class="site-footer">
+  <p>This analysis is for demonstration purposes based on modeled data. Internal Samsung Electronics disclosures may differ. · Sources: Samsung Q1 2026 Earnings · FY2025 Annual Results · Interbrand 2025 · Modeled dataset.</p>
+  <span class="fp">Prepared by: Rahima Akter Diti</span>
+</div>
+
+<script>
+function show(id,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('pg-'+id).classList.add('active');el.classList.add('active');renderAll();}
+const months=["Jan","Feb","Mar","Apr","May","Jun"];
+const revs=[28670.65,26730.25,30553.53,30606.72,33187.52,35251.33];
+const vols=[206279,191846,220232,219561,239580,254152];
+const regions=["Asia Pacific","North America","Europe","Latin America","MEA"];
+const rpb=[5818,7727,2647,2764,1218];
+const rRevs=[87271.15,46363.64,23824.18,16581.09,10959.94];
+const rC=["#1428A0","#1A6B3C","#2D5BE3","#C8962E","#1E3A5F"];
+const cats=["Memory","Mobile","Foundry","Consumer","Display","Harman"];
+const catC=["#1428A0","#2D5BE3","#1E3A5F","#C8962E","#C0392B","#6B7A9B"];
+const brs=[
+  ["Americas HQ - Distributor / Retail","United States","North America","13,722","3,944","28.7%","7.4%","Retail/Carrier"],
+  ["Americas HQ - Carrier / Operator","United States","North America","13,604","3,923","28.8%","7.4%","Retail/Carrier"],
+  ["Americas HQ - Semiconductor OEM","United States","North America","13,540","3,929","29.0%","7.3%","Semiconductor/OEM"],
+  ["APAC Hub - Semiconductor OEM","China","Asia Pacific","11,095","3,180","28.7%","6.0%","Semiconductor/OEM"],
+  ["APAC Hub - Carrier / Operator","China","Asia Pacific","11,029","3,169","28.7%","6.0%","Retail/Carrier"],
+  ["APAC Hub - Distributor / Retail","China","Asia Pacific","10,952","3,145","28.7%","5.9%","Retail/Carrier"],
+  ["APAC Hub - Carrier / Operator","South Korea","Asia Pacific","8,618","2,482","28.8%","4.7%","Retail/Carrier"],
+  ["APAC Hub - Distributor / Retail","South Korea","Asia Pacific","8,574","2,484","29.0%","4.6%","Retail/Carrier"],
+  ["APAC Hub - Semiconductor OEM","South Korea","Asia Pacific","8,569","2,445","28.5%","4.6%","Semiconductor/OEM"],
+  ["APAC Hub - Carrier / Operator","India","Asia Pacific","4,946","1,422","28.8%","2.7%","Retail/Carrier"],
+  ["APAC Hub - Distributor / Retail","India","Asia Pacific","4,915","1,417","28.9%","2.7%","Retail/Carrier"],
+  ["APAC Hub - Semiconductor OEM","India","Asia Pacific","4,879","1,410","28.9%","2.6%","Semiconductor/OEM"],
+  ["EMEA Hub - Distributor / Retail","Germany","Europe","3,676","1,055","28.7%","2.0%","Retail/Carrier"],
+  ["EMEA Hub - Carrier / Operator","Germany","Europe","3,671","1,069","29.1%","2.0%","Retail/Carrier"],
+  ["EMEA Hub - Semiconductor OEM","Germany","Europe","3,662","1,061","29.0%","2.0%","Semiconductor/OEM"],
+];
+function drawLine(id,data,labels,color,W,H,pfx,sfx,div){
+  const svg=document.getElementById(id);if(!svg)return;
+  const p={l:46,r:14,t:20,b:26};
+  const mn=Math.min(...data)*0.93,mx=Math.max(...data)*1.05;
+  const xs=(W-p.l-p.r)/(labels.length-1);
+  const px=i=>p.l+i*xs,py=v=>p.t+(mx-v)/(mx-mn)*(H-p.t-p.b);
+  let h='';
+  for(let i=0;i<4;i++){const v=mn+(mx-mn)*i/3;const y=py(v);h+=`<line x1="${p.l}" y1="${y}" x2="${W-p.r}" y2="${y}" stroke="#E8ECF4" stroke-width="1"/>`;h+=`<text x="${p.l-4}" y="${y+4}" fill="#6B7A9B" font-size="9" font-family="Arial" text-anchor="end">${pfx}${(v/div).toFixed(0)}${sfx}</text>`;}
+  let a=`M ${px(0)} ${py(data[0])}`;data.forEach((v,i)=>{if(i>0)a+=` L ${px(i)} ${py(v)}`;});a+=` L ${px(data.length-1)} ${py(mn)} L ${px(0)} ${py(mn)} Z`;
+  h+=`<path d="${a}" fill="${color}" fill-opacity="0.10"/>`;
+  let l=`M ${px(0)} ${py(data[0])}`;data.forEach((v,i)=>{if(i>0)l+=` L ${px(i)} ${py(v)}`;});
+  h+=`<path d="${l}" fill="none" stroke="${color}" stroke-width="2.4"/>`;
+  data.forEach((v,i)=>{h+=`<circle cx="${px(i)}" cy="${py(v)}" r="4" fill="${color}" stroke="#fff" stroke-width="1.5"/>`;h+=`<text x="${px(i)}" y="${py(v)-11}" fill="${color}" font-size="8.5" font-family="Arial" text-anchor="middle" font-weight="700">${pfx}${(v/div).toFixed(0)}${sfx}</text>`;h+=`<text x="${px(i)}" y="${H-p.b+14}" fill="#6B7A9B" font-size="9" font-family="Arial" text-anchor="middle">${labels[i]}</text>`;});
+  svg.innerHTML=h;
+}
+function drawBars(id,vals,lbls,colors){
+  const el=document.getElementById(id);if(!el)return;
+  const mx=Math.max(...vals);
+  el.innerHTML=vals.map((v,i)=>`<div class="bw"><div class="bf" style="height:${Math.round(v/mx*115)}px;background:${colors[i%colors.length]}"><span class="bv">${v>999?'$'+v.toLocaleString():v.toFixed(2)+'×'}</span></div><div class="bl">${lbls[i].split(' ').slice(0,2).join('<br>')}</div></div>`).join('');
+}
+function drawPie(){
+  const svg=document.getElementById('pieSvg');if(!svg)return;
+  const tot=rRevs.reduce((a,b)=>a+b);
+  const cx=105,cy=92,r=78;let ang=-Math.PI/2,h='';
+  rRevs.forEach((v,i)=>{const da=(v/tot)*2*Math.PI;const x1=cx+r*Math.cos(ang),y1=cy+r*Math.sin(ang);const x2=cx+r*Math.cos(ang+da),y2=cy+r*Math.sin(ang+da);const lg=da>Math.PI?1:0;const mid=ang+da/2;const lx=cx+(r+24)*Math.cos(mid),ly=cy+(r+24)*Math.sin(mid);h+=`<path d="M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${lg} 1 ${x2} ${y2} Z" fill="${rC[i]}"/>`;if(v/tot>0.055)h+=`<text x="${lx}" y="${ly}" fill="${rC[i]}" font-size="8" font-family="Arial" text-anchor="middle" font-weight="700">${(v/tot*100).toFixed(0)}%</text>`;ang+=da;});
+  regions.forEach((r2,i)=>{h+=`<rect x="207" y="${28+i*29}" width="12" height="12" fill="${rC[i]}" rx="2"/>`;h+=`<text x="225" y="${40+i*29}" fill="#0A1628" font-size="10" font-family="Arial">${r2}</text>`;h+=`<text x="318" y="${40+i*29}" fill="#6B7A9B" font-size="10" font-family="Arial" text-anchor="end">${(rRevs[i]/tot*100).toFixed(1)}%</text>`;});
+  svg.innerHTML=h;
+}
+function drawHeatmap(){
+  const g=document.getElementById('hmGrid');if(!g)return;
+  const cS=["Memory","Mobile","Foundry","Consumer","Display","Harman"];
+  const buf=[[12.1,11.9,12.2,12.1,11.8,12.1],[12.0,12.0,12.1,12.0,11.9,12.0],[12.1,11.9,12.1,12.1,11.8,12.1],[12.0,12.0,12.2,12.1,11.8,12.0],[12.1,11.9,12.1,12.1,11.9,12.1]];
+  function cc(v){if(v>=12.1)return{bg:"#1A6B3C",fc:"#fff"};if(v>=11.9)return{bg:"#2E8B57",fc:"#fff"};if(v>=11.8)return{bg:"#C8962E",fc:"#fff"};return{bg:"#C0392B",fc:"#fff"};}
+  let h='<div class="hm-cell" style="background:transparent;"></div>';
+  cS.forEach(c=>{h+=`<div class="hm-cl">${c}</div>`;});
+  regions.forEach((reg,ri)=>{h+=`<div class="hm-rl">${reg}</div>`;buf[ri].forEach(v=>{const{bg,fc}=cc(v);h+=`<div class="hm-cell" style="background:${bg};color:${fc}">${v.toFixed(1)}%</div>`;});});
+  g.innerHTML=h;
+}
+function drawLtViz(){
+  const el=document.getElementById('ltViz');if(!el)return;
+  const d=[{c:"Memory",l:4.0,s:0.000,col:"#1428A0"},{c:"Mobile",l:7.0,s:0.000,col:"#2D5BE3"},{c:"Foundry",l:8.0,s:0.826,col:"#1E3A5F"},{c:"Consumer",l:8.0,s:0.826,col:"#C8962E"},{c:"Display",l:9.0,s:2.185,col:"#C0392B"},{c:"Harman",l:9.0,s:2.185,col:"#C0392B"}];
+  const mx=12;
+  el.innerHTML=d.map(x=>{const bw=Math.round(x.l/mx*100),ew=Math.round(x.s/mx*100);return`<div style="display:flex;align-items:center;gap:9px;margin-bottom:9px"><div style="width:78px;font-size:9.5px;color:#6B7A9B;text-align:right">${x.c}</div><div style="flex:1;position:relative;height:21px;background:#F0F4FA;border-radius:4px"><div style="position:absolute;left:0;top:0;width:${bw}%;height:100%;background:${x.col};border-radius:4px;display:flex;align-items:center;padding-left:7px"><span style="font-size:9.5px;font-weight:700;color:#fff">${x.l.toFixed(1)}d</span></div>${x.s>0?`<div style="position:absolute;left:${bw}%;top:3px;width:${ew*2}%;height:15px;background:${x.col};opacity:.2;border-radius:2px"></div><div style="position:absolute;left:${bw+ew}%;top:0;width:2px;height:100%;background:${x.col};opacity:.5"></div>`:''}</div><div style="width:52px;font-size:9.5px;color:#6B7A9B">σ=${x.s.toFixed(3)}</div></div>`;}).join('');
+}
+function drawBrTbl(){
+  const tb=document.getElementById('brTbl');if(!tb)return;
+  tb.innerHTML=brs.map((b,i)=>`<tr><td>${i+1}</td><td><strong>${b[0]}</strong></td><td>${b[1]}</td><td>${b[2]}</td><td>$${b[3]}</td><td>$${b[4]}</td><td>${b[5]}</td><td>${b[6]}</td><td><span class="pill ${b[7]==='Retail/Carrier'?'pb':'pn'}">${b[7]}</span></td></tr>`).join('');
+}
+function renderAll(){
+  drawLine('ovLine',revs,months,'#1428A0',440,150,'$','K',1000);
+  drawBars('thrBar',rpb,regions,rC);
+  drawPie();
+  drawHeatmap();
+  drawBars('turnsBar',[6.30,6.30,6.30,6.30,6.30,6.30],cats,catC);
+  drawLine('volLine',vols,months,'#2D5BE3',360,150,'','K',1000);
+  drawLtViz();
+  drawBrTbl();
+}
+renderAll();
+</script>
+</body>
+</html>
